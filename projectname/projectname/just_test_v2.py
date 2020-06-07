@@ -39,7 +39,7 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    pic_name = path1 + '\static\confusion_matrix.png'
+    pic_name = path1 + '/static/assets/img/portfolio/confusion_matrix.png'
     plt.savefig(pic_name)
     
     
