@@ -12,6 +12,8 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import load_model
 import itertools
 
+
+
 def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -39,7 +41,7 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    pic_name = path1 + '/static/assets/img/portfolio/confusion_matrix.png'
+    pic_name = path1 + '/static/assets/img/portfolio/confusion_matrix1.png'
     plt.savefig(pic_name)
     
     
@@ -47,10 +49,11 @@ def test_single(number):
     global path1
     path1 = get_script_path()
     path_data = path1 + '\exploratory_data'
-    classifier=load_model(path_data + '\pretrain_model_add_domain_binary_keywords.hdf5')
-    X_test_pd = pd.read_csv(path_data + '\X_test_pd_v2.csv')
-    X_test = np.asarray(X_test_pd.iloc[:,1:])
-    y_test_pd = pd.read_csv(path_data + '\y_test_pd_v2.csv')
+    classifier=load_model(path_data + '\pretrain_model_add_domain_binary_keywords_id.hdf5')
+    X_test_pd = pd.read_csv(path_data + '\X_test_pd_v3_id.csv')
+    X_test_pd_feature = X_test_pd.iloc[:,1:].iloc[:,:-1]
+    X_test = np.asarray(X_test_pd_feature)
+    y_test_pd = pd.read_csv(path_data + '\y_test_pd_v3.csv')
     y_test = np.asarray(y_test_pd.iloc[:,1:])
 
     y_pred=classifier.predict(X_test)
