@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from just_test_v2 import test_single 
+from just_test_v2 import test_single, strategy
 
 
 
@@ -25,12 +25,13 @@ def recommendation_output():
        else:
            some_output="yeay!"
            number = int(some_input)
-           prediction,actual = test_single(number)
+           prediction, actual, company_index = test_single(number)
            some_prediction = 'Prediction: ' + prediction + '__' + '  Actual: ' + actual
            #print ('Predicted outcome, ', prediction)
            #print ('Actual outcome, ', actual)
            #some_image="giphy.gif"
            #some_image="confusion_matrix.png"
+           strategy(company_index,prediction,actual,number)
            return render_template("index.html",
                               my_input=some_input,
                               my_output=some_output,
@@ -38,7 +39,6 @@ def recommendation_output():
                               #my_img_name=some_image,
                               my_form_result="NotEmpty",
                               my_prediction = some_prediction)
-
 
 # start the server with the 'run()' method
 if __name__ == "__main__":
