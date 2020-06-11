@@ -13,6 +13,7 @@ import pickle
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import load_model
 import itertools
@@ -82,7 +83,12 @@ def test_single(number):
     print ('Actual outcome, ', actual)
     cm_plot_labels = ['Faliure','Success']
     plot_confusion_matrix(cm=cm, classes=cm_plot_labels, title='Confusion Matrix')
-    return prediction, actual, company_index
+
+    data = loadtxt(path_data+ '\whole_feature.csv', delimiter=',')
+    image_name_top,url_top=similarity(data,company_index)
+
+    return prediction, actual, company_index, image_name_top,url_top
+
 
 # Generate an array represent all possible combinations of factors for each factor
 def generate_array():
@@ -139,6 +145,7 @@ def test_strategy(target_array,company_index):
     classifier=load_model(path_data + '\pretrain_model_add_domain_binary_keywords_id.hdf5')
 
     data = loadtxt(path_data+ '\whole_feature.csv', delimiter=',')
+
     X_test_number_nlp = list(data[company_index,:][57:])
     nlp_array = []
     for i in range(target_array.shape[0]):
@@ -195,3 +202,52 @@ def strategy(company_index,prediction,actual,number):
             pic_name = path1 + '/static/assets/img/portfolio/strategy_sorted.png'
             plt.savefig(pic_name)
             plt.close()
+
+def similarity(whole_feature,company_index):
+    path_data = path1 + '\exploratory_data'
+    company_feature = whole_feature[company_index,:]
+    company_feature = np.reshape(company_feature,(1,-1))
+
+    similarity_list=[]
+    for single_feature in whole_feature:
+        single_feature=np.reshape(single_feature,(1,-1))
+        cosine_np = cosine_similarity(company_feature,single_feature)
+        similarity_list.append(cosine_np[0][0])
+    cosine_df = pd.DataFrame(similarity_list)
+    cosine_df.columns=['cosine_score']
+    cosine_df['numeric_index']=list(range(whole_feature.shape[0]))
+    cosine_df_sorted=cosine_df.sort_values(by=['cosine_score'],ascending=False)
+    print(cosine_df_sorted.head(20))
+    similarity_top = list(cosine_df_sorted['numeric_index'][0:6])
+    print(similarity_top)
+    
+    df_logo = pd.read_csv(path_data + '\company_logo.csv')
+    df_url=df_logo.homepage_url
+    url_top = []
+    for numeric_index in similarity_top:
+        my_url = df_url[numeric_index]
+        if str(my_url) != 'nan':
+            my_url = my_url[1:][:-1]
+            url_top.append(my_url)
+        else:
+            url_top.append('nan')
+
+    print(url_top)
+    # domain_list=[]
+    # for domain in top_domain:
+    #     if str(domain) != 'nan':
+    #         domain_list.append(domain[1:][:-1])
+    #     else:
+    #         domain_list.append('nan')
+    # top_domain=domain_list
+    # return top_domain
+
+    image_name_top = []
+    for numeric_index in similarity_top:
+        image_name = 'pic_'+ str(numeric_index+1) + '.png'
+        image_name_top.append(image_name)
+
+    return image_name_top,url_top
+
+
+
