@@ -18,10 +18,24 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import load_model
 import itertools
 
+import strategy_interactive_plot 
+
 
 
 def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
+
+def get_profile():
+    global path1
+    path1 = get_script_path()
+    print('wtf')
+    print('wtf')
+    file_name = path1 + '/exploratory_data/bt_c2to4_edited1.txt'
+    print('hello')
+    print('hello')
+    print(file_name)
+    df_profile = pd.read_json (file_name)
+    return df_profile
 
 def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -52,12 +66,10 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     plt.close()
     
     
-def test_single(number):
-    global path1
-    path1 = get_script_path()
-    path_data = path1 + '\exploratory_data'
-    classifier=load_model(path_data + '\pretrain_model_add_domain_binary_keywords_id.hdf5')
-    X_test_pd = pd.read_csv(path_data + '\X_test_pd_v3_id.csv')
+def test_single(number):    
+    path_data = path1 + '/exploratory_data'
+    classifier=load_model(path_data + '/pretrain_model_add_domain_binary_keywords_id.hdf5')
+    X_test_pd = pd.read_csv(path_data + '/X_test_pd_v3_id.csv')
 
     company_index = X_test_pd.iloc[:,0][number]
     print('company_index is',company_index)
@@ -65,7 +77,7 @@ def test_single(number):
     X_test_pd_feature = X_test_pd.iloc[:,1:].iloc[:,:-1]
     X_test = np.asarray(X_test_pd_feature)
     
-    y_test_pd = pd.read_csv(path_data + '\y_test_pd_v3.csv')
+    y_test_pd = pd.read_csv(path_data + '/y_test_pd_v3.csv')
     y_test = np.asarray(y_test_pd.iloc[:,1:])
 
     y_pred=classifier.predict(X_test)
@@ -84,7 +96,7 @@ def test_single(number):
     cm_plot_labels = ['Faliure','Success']
     plot_confusion_matrix(cm=cm, classes=cm_plot_labels, title='Confusion Matrix')
 
-    data = loadtxt(path_data+ '\whole_feature.csv', delimiter=',')
+    data = loadtxt(path_data+ '/whole_feature.csv', delimiter=',')
     image_name_top,url_top=similarity(data,company_index)
 
     return prediction, actual, company_index, image_name_top,url_top
@@ -107,12 +119,12 @@ def generate_array():
     for i in range(array.shape[0]):
         deviation.append(abs(array[i,0]-1) + abs(array[i,1]-1) + abs(array[i,2]-1))
     array_df['deviation'] = deviation
-    array_df.to_csv(path1 + '\\exploratory_data\\factor_deviation.csv')
+    array_df.to_csv(path1 + '/exploratory_data/factor_deviation.csv')
     return array
 
 # Based on user input company ID, obtain its original feature 
 def obtain_target(company_index,array):
-    df = pd.read_csv('C:\\Users\\yanru\\Desktop\\crunbase2013\\feature_one_hot1_0_1.csv')
+    df = pd.read_csv(path1 + '/exploratory_data/feature_one_hot1_0_1.csv')
     x_target = list(df.iloc[company_index,3:])
     size = array.shape[0]
 
@@ -128,23 +140,23 @@ def scale_array(company_index):
     target_array, x_target = obtain_target(company_index,array)
     print('target',x_target)
     x_target_temp = pd.DataFrame(x_target)       
-    x_target_temp.to_csv(path1 + '\\exploratory_data\\x_target_temp.csv')
+    x_target_temp.to_csv(path1 + '/exploratory_data/x_target_temp.csv')
     array[:,0] = array[:,0]*(x_target[2]+10000)
     array[:,1] = array[:,1]*(x_target[4]+1)
     array[:,2] = array[:,2]*(x_target[25]+0.1)
     new_array = array
     target_array[:,[2,4,25]] = new_array
     #print('new strategy feature prior to standard_scaler',target_array)
-    x_target_temp.to_csv(path1 + '\\exploratory_data\\x_target_temp.csv')
-    file_name = path1 + '\\exploratory_data\\strategy_feature_temp.csv'
+    x_target_temp.to_csv(path1 + '/exploratory_data/x_target_temp.csv')
+    file_name = path1 + '/exploratory_data/strategy_feature_temp.csv'
     savetxt(file_name, target_array, delimiter=',')
     return new_array,target_array
 
 def test_strategy(target_array,company_index):
-    path_data = path1 + '\exploratory_data'
-    classifier=load_model(path_data + '\pretrain_model_add_domain_binary_keywords_id.hdf5')
+    path_data = path1 + '/exploratory_data'
+    classifier=load_model(path_data + '/pretrain_model_add_domain_binary_keywords_id.hdf5')
 
-    data = loadtxt(path_data+ '\whole_feature.csv', delimiter=',')
+    data = loadtxt(path_data+ '/whole_feature.csv', delimiter=',')
 
     X_test_number_nlp = list(data[company_index,:][57:])
     nlp_array = []
@@ -153,7 +165,7 @@ def test_strategy(target_array,company_index):
     nlp_array=np.asarray(nlp_array)
     X_test = np.concatenate((target_array,nlp_array),axis=1)
   
-    scaler_file = path_data + '\scaler.pkl'
+    scaler_file = path_data + '/scaler.pkl'
     sc = pickle.load(open(scaler_file,'rb'))
     X_test = sc.fit_transform(X_test)
     
@@ -165,21 +177,26 @@ def test_strategy(target_array,company_index):
     return cm_strategy,y_pred1
 
 def strategy(company_index,prediction,actual,number):
+    strategy_outcome=0
     if actual=='Success':
+        strategy_outcome=2
         print('congrats')
     if actual=='Failure':
         new_array,target_array=scale_array(company_index)
         cm_strategy,y_pred1 = test_strategy(target_array,company_index)
-        if cm_strategy[1,1]==0:
+        if cm_strategy[1,1]==0:           
             print('The generic strategy does not suit you, please contact us for developing customized strategy')
         else:
+            strategy_outcome=1
             print('We can help you succeed!')
-            factor_deviation_df = pd.read_csv(path1 + '\\exploratory_data\\factor_deviation.csv')
+            factor_deviation_df = pd.read_csv(path1 + '/exploratory_data/factor_deviation.csv')
             factor_deviation_df['strategy_prediction'] = y_pred1
-            factor_deviation_df.to_csv(path1 + '\\exploratory_data\\factor_deviation_pre.csv')
+            factor_deviation_df.to_csv(path1 + '/exploratory_data/factor_deviation_pre.csv')
             factor_true = factor_deviation_df[factor_deviation_df['strategy_prediction']==True]
             factor_true_sort = factor_true.sort_values(by=['deviation'])
-            factor_true_sort.to_csv(path1 + '\\exploratory_data\\factor_true_sort.csv')
+            factor_true_sort.to_csv(path1 + '/exploratory_data/factor_true_sort.csv')
+            # create interactive plot
+            strategy_interactive_plot.get_plot()
             data = factor_true_sort.iloc[0:10,1:4]
             data.columns = ['Total Funding', 'Relationship', 'Timeline']
             
@@ -202,9 +219,10 @@ def strategy(company_index,prediction,actual,number):
             pic_name = path1 + '/static/assets/img/portfolio/strategy_sorted.png'
             plt.savefig(pic_name)
             plt.close()
+    return strategy_outcome
 
 def similarity(whole_feature,company_index):
-    path_data = path1 + '\exploratory_data'
+    path_data = path1 + '/exploratory_data'
     company_feature = whole_feature[company_index,:]
     company_feature = np.reshape(company_feature,(1,-1))
 
@@ -221,7 +239,7 @@ def similarity(whole_feature,company_index):
     similarity_top = list(cosine_df_sorted['numeric_index'][0:6])
     print(similarity_top)
     
-    df_logo = pd.read_csv(path_data + '\company_logo.csv')
+    df_logo = pd.read_csv(path_data + '/company_logo.csv')
     df_url=df_logo.homepage_url
     url_top = []
     for numeric_index in similarity_top:
