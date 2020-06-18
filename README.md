@@ -8,4 +8,4 @@
 
 #### Linear bunny is a WebApp that forecasts the success of biotech startups with recommendation of corporate strategies and identification of similar competitors. It provides customized solutions backed by advanced data science techniques that adds values to investors, managers, and entrepreneurs. Compared with conventional approach that focuses primarily on financial strategy, Linear Bunny also considers many other cruicial factors, such as market needs/trend, relationships, management and science & technology.
 
-![App Function Illustration](https://github.com/yanruoyu2005/ruoyu_insightproject/blob/insight_branch/data/raw/app_functions.PNG)
+![App_Function_Illustration] (https://github.com/yanruoyu2005/ruoyu_insightproject/blob/insight_branch/data/raw/app_functions.PNG)
