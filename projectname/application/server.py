@@ -34,7 +34,7 @@ def recommendation_output():
            some_output=" "
            number = int(some_input)
            prediction, actual, company_index,image_name_top,url_top = test_single(number)
-           some_prediction = 'Company ' +  some_input + ': ' + 'Prediction: ' + prediction + '__' + '  Actual: ' + actual
+           some_prediction = 'Company ' + some_input + ' Click here for prediction of more companies.'
            target_image = 'pic_' + str(company_index+1) 
 
            my_image1 = image_name_top[0] 

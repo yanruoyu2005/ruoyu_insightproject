@@ -29,9 +29,6 @@ def get_profile(path0):
     global path1
     #path1 = get_script_path() # previously used for local server
     path1 = path0 # used for production server
-    print('wtf')
-    print('wtf')
-    print(path1)
     file_name = path1 + '/exploratory_data/bt_c2to4_edited1.txt'
     df_profile = pd.read_json (file_name)
     return df_profile
