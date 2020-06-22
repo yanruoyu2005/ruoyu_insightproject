@@ -49,7 +49,7 @@ def get_plot():
                               mode='markers',
                               marker=dict(size=dot_size,
                                           color=color_class[i]),)
-    data.append(trace1)
+        data.append(trace1)
     layout = go.Layout(title="Strategy Forecast",
                        autosize=True,
                        scene=dict(aspectratio=dict(x=1, y=1, z=1), aspectmode="manual",
