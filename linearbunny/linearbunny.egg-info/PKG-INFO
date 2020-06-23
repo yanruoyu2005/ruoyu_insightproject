@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: linearbunny
+Version: 0.0.5
+Summary: A linearbunny package
+Home-page: https://github.com/yanruoyu2005/ruoyu_insightproject/linearbunny
+Author: Ruoyu Yan
+Author-email: yanruoyu2005@gmail.com
+License: GPLv3+
+Description: # ruoyu_insightproject
+        ![Linear Bunny Logo](https://github.com/yanruoyu2005/ruoyu_insightproject/blob/insight_branch/data/raw/webapp_pic1.PNG)
+        
+        ## Background
+        #### Biotechnology has improved many aspects of our lives, from healthcare, sustainable energy & materials to food and beverage. The global biotechnology market size was valued at USD 449.06 billion in 2019. 
+        
+        #### Although there are tremendous opportunities in this industry, it is also a highly risky and volatile sector. For example, several blockbuster drugs were estimated to have sales at over USD 1000 million in 2004, but the actual sales were zero. In general, it is very challenging to perform forecasting in this industry due to its complexity.
+        
+        #### [Linear Bunny](analytics0101.tech) is a WebApp ( http://analytics0101.tech ) that forecasts the success of biotech startups with recommendation of corporate strategies and identification of similar competitors. It provides customized solutions backed by advanced data science techniques that adds values to investors, managers, and entrepreneurs. Compared with conventional approach that focuses primarily on financial strategy, Linear Bunny also considers many other cruicial factors, such as market needs/trend, relationships, management and science & technology.
+        
+        ![App Function Illustration](https://github.com/yanruoyu2005/ruoyu_insightproject/blob/insight_branch/data/raw/app_functions.PNG)
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
