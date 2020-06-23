@@ -10,5 +10,5 @@
 
 ![App Function Illustration](https://github.com/yanruoyu2005/ruoyu_insightproject/blob/insight_branch/data/raw/app_functions.PNG)
 
-#### User Guide
-##### To try the app, choose one of the following options. 1) Go to the WebApp ( http://analytics0101.tech ) directly. 2) Clone / download the repo (ruoyu_insightproject). Go to ruoyu_insightproject/linearbunny and install required packages from requirements.txt. Then go to ruoyu_insightproject/linearbunny/linearbunny, and execute the following command in the terminal: python server.py
+##### User Guide
+###### To try the app, choose one of the following options. 1) Go to the WebApp ( http://analytics0101.tech ) directly. 2) Clone / download the repo (ruoyu_insightproject). Go to ruoyu_insightproject/linearbunny and install the required packages from requirements.txt. Then go to ruoyu_insightproject/linearbunny/linearbunny, and execute the following command in the terminal: python server.py
