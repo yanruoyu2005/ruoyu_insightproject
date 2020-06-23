@@ -6,7 +6,8 @@ from linearbunny import RetrieveExisting, SuccessForecast, Similarity, RetrieveC
 import config as cg
 
 # Create the application object
-app = Flask(__name__)
+#app = Flask(__name__)
+app = Flask(__name__, instance_path=cg.path)
 
 #app = Flask(__name__, instance_path='/home/ubuntu/application')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
